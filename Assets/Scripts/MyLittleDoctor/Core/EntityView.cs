@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.View
+namespace MyLittleDoctor.Core
 {
     public class EntityView : MonoBehaviour
     {

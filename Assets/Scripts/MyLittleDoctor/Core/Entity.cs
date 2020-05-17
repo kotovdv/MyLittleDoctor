@@ -1,7 +1,6 @@
-﻿using Core.View;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Core.Entity
+namespace MyLittleDoctor.Core
 {
     public class Entity
     {

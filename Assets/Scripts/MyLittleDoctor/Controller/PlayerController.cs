@@ -1,8 +1,8 @@
-﻿using System;
-using Core.Controller;
+﻿using MyLittleDoctor.Core;
+using MyLittleDoctor.Entity;
 using UnityEngine;
 
-namespace Player
+namespace MyLittleDoctor.Controller
 {
     public class PlayerController : IController
     {
@@ -10,7 +10,9 @@ namespace Player
         private const float Speed = 0.025F;
 
         public void Initialize() {
-            throw new NotImplementedException();
+            var gameObject = GameObject.Find("Player");
+            var entityView = gameObject.GetComponent<EntityView>();
+            Player = new Player {View = entityView};
         }
 
         public void Tick() {
@@ -19,6 +21,7 @@ namespace Player
 
             var deltaX = horizontalAxis * Speed;
             var deltaY = verticalAxis * Speed;
+
             Player.Position.x += deltaX;
             Player.Position.y += deltaY;
             Player.View.transform.position += new Vector3(deltaX, deltaY, 0);

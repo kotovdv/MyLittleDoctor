@@ -1,4 +1,4 @@
-﻿namespace Core.Controller
+﻿namespace MyLittleDoctor.Core
 {
     public interface IController
     {
