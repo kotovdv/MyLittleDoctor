@@ -6,25 +6,25 @@ namespace MyLittleDoctor.Controller
 {
     public class PlayerController : IController
     {
-        public Player Player;
-        private const float Speed = 0.025F;
+        private Player _player;
+        private Rigidbody2D _rigidbody2D;
+        private const float Speed = 7F;
 
         public void Initialize() {
             var gameObject = GameObject.Find("Player");
             var entityView = gameObject.GetComponent<EntityView>();
-            Player = new Player {View = entityView};
+            _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+            _player = new Player {View = entityView};
         }
 
         public void Tick() {
             var verticalAxis = Input.GetAxis("Vertical");
             var horizontalAxis = Input.GetAxis("Horizontal");
 
-            var deltaX = horizontalAxis * Speed;
-            var deltaY = verticalAxis * Speed;
+            // var deltaX =  * Game.Instance.TimeController.DeltaGameTime;
+            // var deltaY =  * Game.Instance.TimeController.DeltaGameTime;
 
-            Player.Position.x += deltaX;
-            Player.Position.y += deltaY;
-            Player.View.transform.position += new Vector3(deltaX, deltaY, 0);
+            _rigidbody2D.velocity = new Vector2(horizontalAxis * Speed, verticalAxis * Speed);
         }
     }
 }

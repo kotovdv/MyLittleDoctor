@@ -10,6 +10,7 @@ namespace MyLittleDoctor
         private readonly IList<IController> _controllers = new List<IController>();
 
         public void Awake() {
+            _controllers.Add(Game.Instance.TimeController);
             _controllers.Add(new PlayerController());
             _controllers.Add(new CameraController());
         }
