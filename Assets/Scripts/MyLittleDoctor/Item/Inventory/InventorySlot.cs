@@ -1,6 +1,6 @@
-﻿namespace MyLittleDoctor.Item
+﻿namespace MyLittleDoctor.Item.Inventory
 {
-    public class Item
+    public class InventorySlot
     {
         public ItemBlueprint Blueprint;
         public int Quantity;

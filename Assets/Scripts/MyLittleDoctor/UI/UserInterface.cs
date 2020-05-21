@@ -9,9 +9,5 @@ namespace MyLittleDoctor.UI
         [SerializeField] private InventoryView _inventoryView;
         public InventoryView InventoryView => _inventoryView;
 
-        public void Awake()
-        {
-            _inventoryView.Hide();
-        }
     }
 }

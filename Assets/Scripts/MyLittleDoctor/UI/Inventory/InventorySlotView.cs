@@ -1,16 +1,20 @@
-﻿using UnityEngine;
-using UnityEngine.UIElements;
+﻿using MyLittleDoctor.Item;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace MyLittleDoctor.UI.Inventory
 {
     public class InventorySlotView : MonoBehaviour
     {
-        [SerializeField] private GameObject iconGameObject;
-        private Image _iconImage;
+        [SerializeField] private Image image;
+        [SerializeField] private Text text;
 
-        public void Awake()
+        public void UpdateSlot(ItemBlueprint item, int quantity)
         {
-            _iconImage = iconGameObject.GetComponent<Image>();
+            image.enabled = true;
+            text.enabled = true;
+            image.sprite = item.inventoryIcon;
+            text.text = quantity.ToString();
         }
     }
 }

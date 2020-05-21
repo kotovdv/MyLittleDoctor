@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MyLittleDoctor.Controller;
-using MyLittleDoctor.Core;
 using UnityEngine;
 
 namespace MyLittleDoctor
@@ -9,20 +8,27 @@ namespace MyLittleDoctor
     {
         private readonly IList<IController> _controllers = new List<IController>();
 
-        public void Awake() {
+        public void Awake()
+        {
+            Game.Instance.Initialize();
+
             _controllers.Add(Game.Instance.TimeController);
             _controllers.Add(new PlayerController());
             _controllers.Add(new CameraController());
         }
 
-        public void Start() {
-            foreach (var controller in _controllers) {
+        public void Start()
+        {
+            foreach (var controller in _controllers)
+            {
                 controller.Initialize();
             }
         }
 
-        public void Update() {
-            foreach (var controller in _controllers) {
+        public void Update()
+        {
+            foreach (var controller in _controllers)
+            {
                 controller.Tick();
             }
         }
