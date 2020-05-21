@@ -1,5 +1,6 @@
 ﻿using MyLittleDoctor.Core;
 using MyLittleDoctor.Entity;
+using MyLittleDoctor.UI;
 using UnityEngine;
 
 namespace MyLittleDoctor.Controller
@@ -8,23 +9,34 @@ namespace MyLittleDoctor.Controller
     {
         private Player _player;
         private Rigidbody2D _rigidbody2D;
+        private UserInterface _userInterface;
         private const float Speed = 7F;
 
-        public void Initialize() {
+        public void Initialize()
+        {
             var gameObject = GameObject.Find("Player");
-            var entityView = gameObject.GetComponent<EntityView>();
+            _userInterface = GameObject.Find("UI").GetComponent<UserInterface>();
             _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-            _player = new Player {View = entityView};
         }
 
-        public void Tick() {
+        public void Tick()
+        {
+            HandleMovement();
+            HandleUI();
+        }
+
+        private void HandleUI()
+        {
+            if (Input.GetKeyDown(KeyCode.I))
+                _userInterface.InventoryView.InvertVisibility();
+        }
+
+        private void HandleMovement()
+        {
             var verticalAxis = Input.GetAxis("Vertical");
             var horizontalAxis = Input.GetAxis("Horizontal");
 
-            // var deltaX =  * Game.Instance.TimeController.DeltaGameTime;
-            // var deltaY =  * Game.Instance.TimeController.DeltaGameTime;
-
-            _rigidbody2D.velocity = new Vector2(horizontalAxis * Speed, verticalAxis * Speed);
+            _rigidbody2D.velocity = new Vector2(horizontalAxis, verticalAxis).normalized * Speed;
         }
     }
 }
