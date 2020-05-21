@@ -15,7 +15,10 @@ namespace MyLittleDoctor.UI.Inventory
             foreach (var slotView in GetComponentsInChildren<InventorySlotView>())
             {
                 if (slotView != null)
+                {
+                    slotView.Reset();
                     _slots.Add(slotView);
+                }
             }
 
             _slots.Sort(new SlotViewComparer());

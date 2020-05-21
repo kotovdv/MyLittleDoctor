@@ -6,15 +6,32 @@ namespace MyLittleDoctor.UI.Inventory
 {
     public class InventorySlotView : MonoBehaviour
     {
-        [SerializeField] private Image image;
-        [SerializeField] private Text text;
+        [SerializeField] private Image itemIcon;
+        [SerializeField] private Text itemName;
+        [SerializeField] private Text itemCount;
+
+        public void Reset()
+        {
+            SetState(false);
+            itemName.text = "";
+            itemCount.text = "";
+            itemIcon.sprite = null;
+        }
 
         public void UpdateSlot(ItemBlueprint item, int quantity)
         {
-            image.enabled = true;
-            text.enabled = true;
-            image.sprite = item.inventoryIcon;
-            text.text = quantity.ToString();
+            SetState(true);
+            itemName.text = item.itemName;
+            itemCount.text = quantity.ToString();
+            itemIcon.sprite = item.inventoryIcon;
+        }
+
+
+        private void SetState(bool state)
+        {
+            itemName.enabled = state;
+            itemCount.enabled = state;
+            itemIcon.enabled = state;
         }
     }
 }
