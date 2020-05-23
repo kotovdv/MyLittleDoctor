@@ -10,8 +10,8 @@ namespace MyLittleDoctor
     {
         public static readonly Game Instance = new Game();
 
-        public GameConfig GameConfig { get; private set; }
         public Player.Player Player { get; private set; }
+        public GameConfig GameConfig { get; private set; }
         public UserInterface UserInterface { get; private set; }
 
         public readonly TimeController TimeController = new TimeController();
@@ -46,9 +46,7 @@ namespace MyLittleDoctor
         private void InitializeUserInterface()
         {
             UserInterface = Object.FindObjectOfType<UserInterface>();
-            var inventoryView = UserInterface.InventoryView;
-            inventoryView.Initialize();
-            inventoryView.Subscribe(Player.Inventory);
+            UserInterface.Initialize(Player);
         }
     }
 }

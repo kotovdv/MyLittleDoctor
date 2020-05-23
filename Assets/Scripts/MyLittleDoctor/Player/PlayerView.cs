@@ -1,4 +1,5 @@
-﻿using MyLittleDoctor.Core;
+﻿using System;
+using MyLittleDoctor.Core;
 using UnityEngine;
 
 namespace MyLittleDoctor.Player
@@ -10,6 +11,12 @@ namespace MyLittleDoctor.Player
         private void Awake()
         {
             Rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Debug.Log($"Triggered with {other.gameObject.name}");
         }
     }
 }

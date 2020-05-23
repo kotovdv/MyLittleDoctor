@@ -14,11 +14,10 @@ namespace MyLittleDoctor.UI.Inventory
 
             foreach (var slotView in GetComponentsInChildren<InventorySlotView>())
             {
-                if (slotView != null)
-                {
-                    slotView.Reset();
-                    _slots.Add(slotView);
-                }
+                if (slotView == null) continue;
+                
+                slotView.Reset();
+                _slots.Add(slotView);
             }
 
             _slots.Sort(new SlotViewComparer());
@@ -39,23 +38,6 @@ namespace MyLittleDoctor.UI.Inventory
             int index = row * Game.Instance.GameConfig.InventoryConfig.Rows + column;
             var view = _slots[index];
             view.UpdateSlot(item, quantity);
-        }
-
-
-        private class SlotViewComparer : Comparer<InventorySlotView>
-        {
-            public override int Compare(InventorySlotView left, InventorySlotView right)
-            {
-                var leftPos = left.gameObject.transform.position;
-                var rightPos = right.gameObject.transform.position;
-
-                var xComparison = leftPos.x.CompareTo(rightPos.x);
-                var yComparison = -leftPos.y.CompareTo(rightPos.y);
-
-                return yComparison != 0
-                    ? yComparison
-                    : xComparison;
-            }
         }
     }
 }

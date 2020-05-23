@@ -21,6 +21,9 @@ namespace MyLittleDoctor.Controller
         {
             if (Input.GetKeyDown(KeyCode.I))
                 Game.Instance.UserInterface.InventoryView.InvertVisibility();
+
+            if (Input.GetKeyDown(KeyCode.E))
+                Game.Instance.UserInterface.PickupSystem.PickUp();
         }
 
         private void HandleMovement()
