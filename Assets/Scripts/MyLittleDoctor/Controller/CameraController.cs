@@ -1,4 +1,5 @@
-﻿using MyLittleDoctor.Util;
+﻿using MyLittleDoctor.Player;
+using MyLittleDoctor.Util;
 using UnityEngine;
 
 namespace MyLittleDoctor.Controller
@@ -6,9 +7,9 @@ namespace MyLittleDoctor.Controller
     public class CameraController : IController
     {
         private Camera _camera;
-        private Player.Player _player;
+        private readonly PlayerModel _player;
 
-        public CameraController(Player.Player player)
+        public CameraController(PlayerModel player)
         {
             _player = player;
         }

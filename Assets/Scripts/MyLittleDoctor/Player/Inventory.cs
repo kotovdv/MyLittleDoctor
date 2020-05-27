@@ -1,4 +1,6 @@
-﻿namespace MyLittleDoctor.Item.Inventory
+﻿using MyLittleDoctor.Item;
+
+namespace MyLittleDoctor.Player
 {
     public class Inventory
     {
@@ -61,6 +63,12 @@
             }
 
             return null;
+        }
+
+        private class InventorySlot
+        {
+            public ItemBlueprint Blueprint;
+            public int Quantity;
         }
     }
 }

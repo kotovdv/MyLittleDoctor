@@ -2,7 +2,6 @@
 using MyLittleDoctor.Configuration;
 using MyLittleDoctor.Controller;
 using MyLittleDoctor.Item;
-using MyLittleDoctor.Item.Inventory;
 using MyLittleDoctor.Player;
 using MyLittleDoctor.UI;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace MyLittleDoctor
 {
     public class Game : MonoBehaviour
     {
-        private Player.Player _player;
+        private PlayerModel _player;
         private GameConfig _gameConfig;
         private UserInterface _userInterface;
         private ICollection<IController> _controllers;
@@ -48,7 +47,7 @@ namespace MyLittleDoctor
         private void InitializePlayer()
         {
             var playerView = FindObjectOfType<PlayerView>();
-            var player = new Player.Player(new Inventory(
+            var player = new PlayerModel(new Inventory(
                 _gameConfig.PlayerConfig.InventoryConfig.Rows,
                 _gameConfig.PlayerConfig.InventoryConfig.Columns
             ));

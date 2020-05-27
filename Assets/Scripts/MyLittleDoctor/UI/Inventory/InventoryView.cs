@@ -37,7 +37,7 @@ namespace MyLittleDoctor.UI.Inventory
             gameObject.SetActive(!gameObject.activeSelf);
         }
 
-        public void Subscribe(Item.Inventory.Inventory inventory)
+        public void Subscribe(Player.Inventory inventory)
         {
             inventory.OnSlotChanged += OnInventoryChanged;
         }

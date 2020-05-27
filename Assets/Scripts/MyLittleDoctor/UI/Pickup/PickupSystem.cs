@@ -6,12 +6,12 @@ namespace MyLittleDoctor.UI.Pickup
 {
     public class PickupSystem
     {
-        private readonly Item.Inventory.Inventory _inventory;
+        private readonly Player.Inventory _inventory;
         private readonly PickupNotification _notification;
         private readonly LinkedList<ItemView> _reachableItems = new LinkedList<ItemView>();
 
         public PickupSystem(
-            Item.Inventory.Inventory inventory,
+            Player.Inventory inventory,
             PickupNotification notification)
         {
             _inventory = inventory;

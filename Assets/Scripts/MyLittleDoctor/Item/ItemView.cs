@@ -10,6 +10,7 @@ namespace MyLittleDoctor.Item
         [SerializeField] private int quantity;
         [SerializeField] private ItemBlueprint itemBlueprint;
         [SerializeField] private SpriteRenderer spriteRenderer;
+
         private PickupSystem _pickupSystem;
 
         public long Identifier => identifier;
@@ -19,6 +20,7 @@ namespace MyLittleDoctor.Item
         public void Initialize(PickupSystem pickupSystem)
         {
             _pickupSystem = pickupSystem;
+            RefreshBlueprint(itemBlueprint);
         }
 
         public void Destroy()
@@ -29,10 +31,10 @@ namespace MyLittleDoctor.Item
         private void OnValidate()
         {
             if (itemBlueprint != null)
-                ChangeBlueprint(itemBlueprint);
+                RefreshBlueprint(itemBlueprint);
         }
 
-        private void ChangeBlueprint(ItemBlueprint item)
+        private void RefreshBlueprint(ItemBlueprint item)
         {
             itemBlueprint = item;
             spriteRenderer.sprite = item.InventoryIcon;

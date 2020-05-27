@@ -1,4 +1,5 @@
 ﻿using MyLittleDoctor.Configuration;
+using MyLittleDoctor.Player;
 using MyLittleDoctor.UI;
 using UnityEngine;
 
@@ -6,13 +7,13 @@ namespace MyLittleDoctor.Controller
 {
     public class PlayerController : IController
     {
-        private readonly Player.Player _player;
+        private readonly PlayerModel _player;
         private readonly PlayerConfig _playerConfig;
         private readonly UserInterface _userInterface;
         private readonly ControlsConfig _controlsConfig;
 
         public PlayerController(
-            Player.Player player,
+            PlayerModel player,
             GameConfig gameConfig,
             UserInterface userInterface)
         {
