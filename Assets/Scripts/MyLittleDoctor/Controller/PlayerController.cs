@@ -1,37 +1,51 @@
-﻿using UnityEngine;
+﻿using MyLittleDoctor.Configuration;
+using MyLittleDoctor.UI;
+using UnityEngine;
 
 namespace MyLittleDoctor.Controller
 {
     public class PlayerController : IController
     {
-        private float _speed;
+        private readonly Player.Player _player;
+        private readonly PlayerConfig _playerConfig;
+        private readonly UserInterface _userInterface;
+        private readonly ControlsConfig _controlsConfig;
 
-        public void Initialize()
+        public PlayerController(
+            Player.Player player,
+            GameConfig gameConfig,
+            UserInterface userInterface)
         {
-            _speed = Game.Instance.GameConfig.PlayerConfig.Speed;
+            _player = player;
+            _playerConfig = gameConfig.PlayerConfig;
+            _userInterface = userInterface;
+            _controlsConfig = gameConfig.ControlsConfig;
         }
+
+        public void Initialize() { }
 
         public void Tick()
         {
             HandleMovement();
-            HandleUI();
-        }
-
-        private void HandleUI()
-        {
-            if (Input.GetKeyDown(KeyCode.I))
-                Game.Instance.UserInterface.InventoryView.InvertVisibility();
-
-            if (Input.GetKeyDown(KeyCode.E))
-                Game.Instance.UserInterface.PickupSystem.PickUp();
+            HandleUserInterface();
         }
 
         private void HandleMovement()
         {
-            var verticalAxis = Input.GetAxis("Vertical");
-            var horizontalAxis = Input.GetAxis("Horizontal");
-            Game.Instance.Player.View.Rigidbody2D.velocity =
-                new Vector2(horizontalAxis, verticalAxis).normalized * _speed;
+            var verticalAxis = Input.GetAxis(_controlsConfig.VerticalMovementAxis);
+            var horizontalAxis = Input.GetAxis(_controlsConfig.HorizontalMovementAxis);
+
+            var direction = new Vector2(horizontalAxis, verticalAxis).normalized;
+            _player.View.Rigidbody2D.velocity = direction * _playerConfig.Speed;
+        }
+
+        private void HandleUserInterface()
+        {
+            if (Input.GetKeyDown(_controlsConfig.Inventory))
+                _userInterface.InventoryView.InvertVisibility();
+
+            if (Input.GetKeyDown(_controlsConfig.PickupItem))
+                _userInterface.PickupSystem.PickUp();
         }
     }
 }

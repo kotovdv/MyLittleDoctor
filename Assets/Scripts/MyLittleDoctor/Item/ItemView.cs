@@ -1,4 +1,5 @@
 ﻿using MyLittleDoctor.Player;
+using MyLittleDoctor.UI.Pickup;
 using UnityEngine;
 
 namespace MyLittleDoctor.Item
@@ -6,39 +7,44 @@ namespace MyLittleDoctor.Item
     public class ItemView : MonoBehaviour
     {
         [SerializeField] private long identifier;
-        [SerializeField] private int _quantity;
-        [SerializeField] private ItemBlueprint _itemBlueprint;
-        [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private int quantity;
+        [SerializeField] private ItemBlueprint itemBlueprint;
+        [SerializeField] private SpriteRenderer spriteRenderer;
+        private PickupSystem _pickupSystem;
 
         public long Identifier => identifier;
-        public int Quantity => _quantity;
-        public ItemBlueprint Item => _itemBlueprint;
+        public int Quantity => quantity;
+        public ItemBlueprint Item => itemBlueprint;
 
-        public void Initialize(ItemBlueprint item)
+        public void Initialize(PickupSystem pickupSystem)
         {
-            _itemBlueprint = item;
-            _spriteRenderer.sprite = item.inventoryIcon;
-            gameObject.name = item.itemName;
+            _pickupSystem = pickupSystem;
         }
 
         public void Destroy()
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         private void OnValidate()
         {
-            if (_itemBlueprint != null)
-                Initialize(_itemBlueprint);
+            if (itemBlueprint != null)
+                ChangeBlueprint(itemBlueprint);
         }
 
+        private void ChangeBlueprint(ItemBlueprint item)
+        {
+            itemBlueprint = item;
+            spriteRenderer.sprite = item.InventoryIcon;
+            gameObject.name = item.ItemName;
+        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.GetComponent<PlayerView>())
                 return;
 
-            Game.Instance.UserInterface.PickupSystem.Add(this);
+            _pickupSystem.AddReachableItem(this);
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -46,7 +52,7 @@ namespace MyLittleDoctor.Item
             if (!other.GetComponent<PlayerView>())
                 return;
 
-            Game.Instance.UserInterface.PickupSystem.Remove(identifier);
+            _pickupSystem.RemoveReachableItem(this);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace MyLittleDoctor.Core
+﻿namespace MyLittleDoctor.Core
 {
     public abstract class Model<TM, TV>
         where TV : View<TM, TV>

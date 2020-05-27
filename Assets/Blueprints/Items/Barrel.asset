@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Barrel
   type: 0
   inventoryIcon: {fileID: 21300000, guid: d0cb06f68fae99547b94150d11944d73, type: 3}
-  prefabLink: {fileID: 1881355174338662038, guid: db07711552b24714b9ff942556b009bd,
+  prefabLink: {fileID: 772465161182749827, guid: 16f3edf621fdc9e4e9a0870e723ad36d,
     type: 3}

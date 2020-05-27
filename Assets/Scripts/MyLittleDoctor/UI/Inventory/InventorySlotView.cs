@@ -21,11 +21,10 @@ namespace MyLittleDoctor.UI.Inventory
         public void UpdateSlot(ItemBlueprint item, int quantity)
         {
             SetState(true);
-            itemName.text = item.itemName;
+            itemName.text = item.ItemName;
             itemCount.text = quantity.ToString();
-            itemIcon.sprite = item.inventoryIcon;
+            itemIcon.sprite = item.InventoryIcon;
         }
-
 
         private void SetState(bool state)
         {

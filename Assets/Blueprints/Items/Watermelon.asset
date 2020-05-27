@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Watermelon
   type: 0
   inventoryIcon: {fileID: 21300000, guid: bfe98bb2aae19064e89d675aaf97763e, type: 3}
-  prefabLink: {fileID: 0}
+  prefabLink: {fileID: 772465161182749827, guid: 16f3edf621fdc9e4e9a0870e723ad36d,
+    type: 3}

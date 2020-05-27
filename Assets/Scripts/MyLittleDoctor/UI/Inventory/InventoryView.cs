@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using MyLittleDoctor.Configuration;
 using MyLittleDoctor.Item;
 using UnityEngine;
 
@@ -6,26 +6,30 @@ namespace MyLittleDoctor.UI.Inventory
 {
     public class InventoryView : MonoBehaviour
     {
-        private readonly List<InventorySlotView> _slots = new List<InventorySlotView>();
+        [SerializeField] private GameObject inventorySlotsContainer;
+        [SerializeField] private GameObject inventorySlotViewPrefab;
+        private InventorySlotView[,] _slots;
 
-        public void Initialize()
+        public void Initialize(InventoryConfig inventoryConfig)
         {
-            _slots.Clear();
+            _slots = new InventorySlotView[inventoryConfig.Rows, inventoryConfig.Columns];
 
-            foreach (var slotView in GetComponentsInChildren<InventorySlotView>())
+            for (var i = 0; i < inventoryConfig.Rows; i++)
+            for (var j = 0; j < inventoryConfig.Columns; j++)
             {
-                if (slotView == null) continue;
-                
-                slotView.Reset();
-                _slots.Add(slotView);
+                var slotView = Instantiate(
+                    inventorySlotViewPrefab,
+                    inventorySlotsContainer.transform
+                );
+                var inventorySlotView = slotView.GetComponent<InventorySlotView>();
+                inventorySlotView.Reset();
+                _slots[i, j] = inventorySlotView;
             }
-
-            _slots.Sort(new SlotViewComparer());
         }
 
-        public void Subscribe(Item.Inventory.Inventory inventory)
+        public void Hide()
         {
-            inventory.OnSlotChanged += OnInventoryChanged;
+            gameObject.SetActive(false);
         }
 
         public void InvertVisibility()
@@ -33,10 +37,14 @@ namespace MyLittleDoctor.UI.Inventory
             gameObject.SetActive(!gameObject.activeSelf);
         }
 
+        public void Subscribe(Item.Inventory.Inventory inventory)
+        {
+            inventory.OnSlotChanged += OnInventoryChanged;
+        }
+
         private void OnInventoryChanged(int row, int column, ItemBlueprint item, int quantity)
         {
-            int index = row * Game.Instance.GameConfig.InventoryConfig.Rows + column;
-            var view = _slots[index];
+            var view = _slots[row, column];
             view.UpdateSlot(item, quantity);
         }
     }

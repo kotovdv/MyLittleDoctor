@@ -2,13 +2,13 @@
 {
     public class Inventory
     {
-        public delegate void SlotChangedAction(int row, int column, ItemBlueprint item, int quantity);
-
-        public event SlotChangedAction OnSlotChanged;
-
         private readonly int _rows;
         private readonly int _columns;
         private readonly InventorySlot[,] _slots;
+
+        public event SlotChangedAction OnSlotChanged;
+
+        public delegate void SlotChangedAction(int row, int column, ItemBlueprint item, int quantity);
 
         public Inventory(int rows, int columns)
         {
@@ -17,40 +17,50 @@
             _slots = new InventorySlot[rows, columns];
         }
 
-        public void AddItem(ItemBlueprint blueprint, int quantity, bool invokeEvents = true)
+        public bool AddItem(ItemBlueprint blueprint, int quantity, bool invokeEvents = true)
         {
-            var (row, column) = FindSlot(blueprint);
+            var position = FindSlotPosition(blueprint);
+            if (!position.HasValue)
+                return false;
 
-            var slot = _slots[row, column];
+            var row = position.Value.Item1;
+            var column = position.Value.Item2;
 
-            if (slot == null)
-            {
-                slot = new InventorySlot {Blueprint = blueprint, Quantity = 0};
-                _slots[row, column] = slot;
-            }
-
+            var slot = GetSlot(row, column);
+            slot.Blueprint = blueprint;
             slot.Quantity += quantity;
 
             if (invokeEvents)
                 OnSlotChanged?.Invoke(row, column, slot.Blueprint, slot.Quantity);
+
+            return true;
         }
 
-        private (int, int) FindSlot(ItemBlueprint blueprint)
+        private InventorySlot GetSlot(int row, int column)
+        {
+            var slot = _slots[row, column];
+            if (slot == null)
+            {
+                slot = new InventorySlot();
+                _slots[row, column] = slot;
+            }
+
+            return slot;
+        }
+
+        private (int, int)? FindSlotPosition(ItemBlueprint blueprint)
         {
             for (var i = 0; i < _rows; i++)
+            for (var j = 0; j < _columns; j++)
             {
-                for (var j = 0; j < _columns; j++)
+                var currentItem = _slots[i, j];
+                if (currentItem == null || currentItem.Blueprint == blueprint)
                 {
-                    var currentItem = _slots[i, j];
-                    if (currentItem == null || currentItem.Blueprint == blueprint)
-                    {
-                        return (i, j);
-                    }
+                    return (i, j);
                 }
             }
 
-            //todo handle properly;
-            return (-1, -1);
+            return null;
         }
     }
 }

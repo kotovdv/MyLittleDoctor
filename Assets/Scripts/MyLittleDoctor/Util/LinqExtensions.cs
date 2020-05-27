@@ -11,7 +11,7 @@ namespace MyLittleDoctor.Util
             while (current != null)
             {
                 var next = current.Next;
-                
+
                 if (match.Invoke(current.Value))
                     list.Remove(current);
 

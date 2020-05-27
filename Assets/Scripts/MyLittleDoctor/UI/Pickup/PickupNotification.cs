@@ -1,4 +1,5 @@
-﻿using MyLittleDoctor.Item;
+﻿using MyLittleDoctor.Configuration;
+using MyLittleDoctor.Item;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,12 +7,18 @@ namespace MyLittleDoctor.UI.Pickup
 {
     public class PickupNotification : MonoBehaviour
     {
-        [SerializeField] private Text _text;
+        [SerializeField] private Text text;
+        private ControlsConfig _controlsConfig;
+
+        public void Initialize(ControlsConfig controlsConfig)
+        {
+            _controlsConfig = controlsConfig;
+        }
 
         public void Show(ItemBlueprint itemBlueprint, int quantity)
         {
             gameObject.SetActive(true);
-            _text.text = $"Press E to pick up {itemBlueprint.itemName}({quantity})";
+            text.text = $"Press {_controlsConfig.PickupItem} to pick up {itemBlueprint.ItemName}({quantity})";
         }
 
         public void Hide()

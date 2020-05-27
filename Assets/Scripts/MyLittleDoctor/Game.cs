@@ -1,4 +1,7 @@
-﻿using MyLittleDoctor.Controller;
+﻿using System.Collections.Generic;
+using MyLittleDoctor.Configuration;
+using MyLittleDoctor.Controller;
+using MyLittleDoctor.Item;
 using MyLittleDoctor.Item.Inventory;
 using MyLittleDoctor.Player;
 using MyLittleDoctor.UI;
@@ -6,47 +9,76 @@ using UnityEngine;
 
 namespace MyLittleDoctor
 {
-    public class Game
+    public class Game : MonoBehaviour
     {
-        public static readonly Game Instance = new Game();
+        private Player.Player _player;
+        private GameConfig _gameConfig;
+        private UserInterface _userInterface;
+        private ICollection<IController> _controllers;
 
-        public Player.Player Player { get; private set; }
-        public GameConfig GameConfig { get; private set; }
-        public UserInterface UserInterface { get; private set; }
-
-        public readonly TimeController TimeController = new TimeController();
-
-        public void Initialize()
+        private void Awake()
         {
             InitializeGameConfiguration();
             InitializePlayer();
             InitializeUserInterface();
+            InitializeControllers();
+            InitializeLevel();
+        }
+
+        private void Start()
+        {
+            foreach (var controller in _controllers)
+                controller.Initialize();
+        }
+
+        private void Update()
+        {
+            foreach (var controller in _controllers)
+                controller.Tick();
         }
 
         private void InitializeGameConfiguration()
         {
-            var inventoryConfig = new InventoryConfig(5, 4);
-            var playerConfig = new PlayerConfig(7);
-            GameConfig = new GameConfig(playerConfig, inventoryConfig);
+            _gameConfig = new GameConfig(
+                new PlayerConfig(7, new InventoryConfig(5, 4)),
+                new ControlsConfig()
+            );
         }
 
         private void InitializePlayer()
         {
-            var playerView = Object.FindObjectOfType<PlayerView>();
+            var playerView = FindObjectOfType<PlayerView>();
             var player = new Player.Player(new Inventory(
-                GameConfig.InventoryConfig.Rows,
-                GameConfig.InventoryConfig.Columns
+                _gameConfig.PlayerConfig.InventoryConfig.Rows,
+                _gameConfig.PlayerConfig.InventoryConfig.Columns
             ));
+
             player.AttachView(playerView);
             playerView.AttachModel(player);
 
-            Player = player;
+            _player = player;
         }
 
         private void InitializeUserInterface()
         {
-            UserInterface = Object.FindObjectOfType<UserInterface>();
-            UserInterface.Initialize(Player);
+            _userInterface = FindObjectOfType<UserInterface>();
+            _userInterface.Initialize(_player, _gameConfig);
+        }
+
+        private void InitializeControllers()
+        {
+            _controllers = new List<IController>
+            {
+                new PlayerController(_player, _gameConfig, _userInterface),
+                new CameraController(_player)
+            };
+        }
+
+        private void InitializeLevel()
+        {
+            var itemViews = FindObjectsOfType<ItemView>();
+            foreach (var itemView in itemViews)
+                itemView.Initialize(_userInterface.PickupSystem);
         }
     }
 }

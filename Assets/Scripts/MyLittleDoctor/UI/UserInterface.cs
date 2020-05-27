@@ -1,4 +1,5 @@
-﻿using MyLittleDoctor.UI.Inventory;
+﻿using MyLittleDoctor.Configuration;
+using MyLittleDoctor.UI.Inventory;
 using MyLittleDoctor.UI.Pickup;
 using UnityEngine;
 
@@ -6,18 +7,22 @@ namespace MyLittleDoctor.UI
 {
     public class UserInterface : MonoBehaviour
     {
-        [SerializeField] private InventoryView _inventoryView;
-        [SerializeField] private PickupNotification _pickupNotification;
+        [SerializeField] private InventoryView inventoryView;
+        [SerializeField] private PickupNotification pickupNotification;
         private PickupSystem _pickupSystem;
 
-        public InventoryView InventoryView => _inventoryView;
+        public InventoryView InventoryView => inventoryView;
         public PickupSystem PickupSystem => _pickupSystem;
 
-        public void Initialize(Player.Player player)
+        public void Initialize(Player.Player player, GameConfig gameConfig)
         {
-            _inventoryView.Initialize();
-            _inventoryView.Subscribe(player.Inventory);
-            _pickupSystem = new PickupSystem(player.Inventory, _pickupNotification);
+            inventoryView.Initialize(gameConfig.PlayerConfig.InventoryConfig);
+            inventoryView.Subscribe(player.Inventory);
+            inventoryView.Hide();
+
+            pickupNotification.Initialize(gameConfig.ControlsConfig);
+            _pickupSystem = new PickupSystem(player.Inventory, pickupNotification);
+            pickupNotification.Hide();
         }
     }
 }

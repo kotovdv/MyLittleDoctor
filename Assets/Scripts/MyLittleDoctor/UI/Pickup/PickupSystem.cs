@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MyLittleDoctor.Item;
 using MyLittleDoctor.Util;
 
@@ -9,7 +8,7 @@ namespace MyLittleDoctor.UI.Pickup
     {
         private readonly Item.Inventory.Inventory _inventory;
         private readonly PickupNotification _notification;
-        private readonly LinkedList<ItemView> _pickableItems = new LinkedList<ItemView>();
+        private readonly LinkedList<ItemView> _reachableItems = new LinkedList<ItemView>();
 
         public PickupSystem(
             Item.Inventory.Inventory inventory,
@@ -21,36 +20,40 @@ namespace MyLittleDoctor.UI.Pickup
 
         public void PickUp()
         {
-            if (_pickableItems.Count == 0)
+            if (_reachableItems.Count == 0)
                 return;
-            var item = _pickableItems.First.Value;
-            _inventory.AddItem(item.Item, item.Quantity);
-            _pickableItems.RemoveFirst();
+
+            var item = _reachableItems.First.Value;
+
+            var wasAdded = _inventory.AddItem(item.Item, item.Quantity);
+            if (!wasAdded) return;
+
+            _reachableItems.RemoveFirst();
             item.Destroy();
         }
 
-        public void Remove(long identifier)
+        public void AddReachableItem(ItemView item)
         {
-            _pickableItems.RemoveAll(i => i.Identifier == identifier);
+            _reachableItems.RemoveAll(i => i.Identifier == item.Identifier);
+            _reachableItems.AddFirst(item);
             RefreshNotification();
         }
 
-        public void Add(ItemView itemView)
+        public void RemoveReachableItem(ItemView item)
         {
-            _pickableItems.RemoveAll(i => i.Identifier == itemView.Identifier);
-            _pickableItems.AddFirst(itemView);
+            _reachableItems.RemoveAll(i => i.Identifier == item.Identifier);
             RefreshNotification();
         }
 
         private void RefreshNotification()
         {
-            if (_pickableItems.Count == 0)
+            if (_reachableItems.Count == 0)
             {
                 _notification.Hide();
             }
             else
             {
-                var item = _pickableItems.First.Value;
+                var item = _reachableItems.First.Value;
                 _notification.Show(item.Item, item.Quantity);
             }
         }
